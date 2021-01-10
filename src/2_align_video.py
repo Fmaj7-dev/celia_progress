@@ -62,10 +62,11 @@ for file in filenames:
 
     # load pixmap
     pixmap = QtGui.QPixmap(sys.argv[1] + "/" + file)
+
+    # put it on a bigger pixmap
     width = pixmap.width()
     height = pixmap.height()
 
-    # put it on a bigger pixmap
     base = QtGui.QPixmap(10000, 10000)
     painter = QtGui.QPainter()
     painter.begin(base)
@@ -98,9 +99,11 @@ for file in filenames:
     
     #rotate
     pixmap = pixmap.transformed(rotation)
+    pixmap.save("output/after_rotation_"+file, "JPG")
     #scale
     pixmap = pixmap.transformed(scale)
-    pixmap.save("output/sans_transformation_"+file, "JPG")
+    pixmap.save("output/after_scale_"+file, "JPG")
+    
     #translate
     #pixmap = pixmap.transformed(translation2)
     
@@ -113,5 +116,5 @@ for file in filenames:
     print("")
 
     i += 1
-    if i == 10:
+    if i == 1:
         exit()
