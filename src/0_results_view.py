@@ -3,6 +3,15 @@ import sys
 from PySide6 import QtCore, QtWidgets, QtGui, QtUiTools
 import numpy as np
 
+class graphicsScene(QtWidgets.QGraphicsScene):
+    def __init__ (self):#, parent=None):
+        super(graphicsScene, self).__init__ ()#parent)
+
+    def mousePressEvent(self, event):
+        #super(graphicsScene, self).mousePressEvent(event)
+        print(str(event.scenePos().x()) + " " +str(event.scenePos().y()))
+
+
 class EyesWidget(QtWidgets.QWidget):
     def __init__(self, image):
         super().__init__()
@@ -14,7 +23,7 @@ class EyesWidget(QtWidgets.QWidget):
         #print("size: "+str(width)+" "+str(height))
         
         # configure scene & view
-        self.scene = QtWidgets.QGraphicsScene()
+        self.scene = graphicsScene()
         self.view = QtWidgets.QGraphicsView(self.scene)
         self.scene.addPixmap(self.background)
 
