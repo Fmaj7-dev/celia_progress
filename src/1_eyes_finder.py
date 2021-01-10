@@ -62,6 +62,8 @@ class EyesWidget(QtWidgets.QWidget):
         if event.key() == 32:
             self.scene.write()
             sys.exit()
+        else:
+            sys.exit()
 
     # print mouse position
     def mousePressEvent(self, QMouseEvent):
