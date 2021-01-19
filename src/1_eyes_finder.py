@@ -2,6 +2,7 @@
 import sys
 from PySide6 import QtCore, QtWidgets, QtGui, QtUiTools
 import numpy as np
+from PIL import Image, ExifTags
 
 class graphicsScene(QtWidgets.QGraphicsScene):
     def __init__ (self, imagename):#, parent=None):
@@ -31,17 +32,43 @@ class graphicsScene(QtWidgets.QGraphicsScene):
         f.close()
 
 class EyesWidget(QtWidgets.QWidget):
-    def __init__(self, image):
+    def __init__(self, imagename):
         super().__init__()
 
-        print("opening "+image)
-        self.background = QtGui.QPixmap(image)
+        print("opening "+imagename)
+        self.background = QtGui.QPixmap(imagename)
+
+        # fucking exif tag
+        image=Image.open(imagename)
+
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation]=='Orientation':
+                break
+        
+        exif = image._getexif()
+
+        angle = 0
+        if exif is not None:
+            if exif[orientation] == 3:
+                angle = 180
+            elif exif[orientation] == 6:
+                angle = 270
+            elif exif[orientation] == 8:
+                angle = 90
+        else:
+            print("no exif data found")
+
+        print("exif: angle "+str(angle))
+        rotation = QtGui.QTransform().rotate(-angle)
+        self.background = self.background.transformed(rotation)
+
+        
         width = self.background.size().width()
         height = self.background.size().height()
         print("size: "+str(width)+" "+str(height))
         
         # configure scene & view
-        self.scene = graphicsScene(image) #QtWidgets.QGraphicsScene()
+        self.scene = graphicsScene(imagename) #QtWidgets.QGraphicsScene()
         self.view = QtWidgets.QGraphicsView(self.scene)
         self.scene.addPixmap(self.background)
         #self.view.resize(self.background.size().width(), self.background.size().height() )
