@@ -1,25 +1,23 @@
 import os
 import sys
-#from PySide6 import QtGui, QtWidgets, QtCore
 import cv2
 from math import *
 import numpy as np
 
 
+# get all filenames from directory
 directory =  os.fsencode(sys.argv[1])
 
 filenames = []
 
 for file in os.listdir(directory):
     filename = os.fsdecode(file)
-    if not filename.endswith( ('.txt') ): # whatever file types you're using...
+    if not filename.endswith( ('.txt') ):
         filenames.append(filename)
 
 filenames.sort()
 
 #filenames = ["20201212.jpg"]
-i = 0
-#app = QtWidgets.QApplication([])
 
 for file in filenames:
     file_txt = sys.argv[1] + "/" + file + ".txt"
@@ -64,7 +62,6 @@ for file in filenames:
     height, width, channels = img.shape
 
     #put it on a bigger image
-    print(" ### Correction needed")
     big_img = np.zeros((6000,6000,3), np.uint8)
     
     x_offset = 1000
@@ -84,7 +81,7 @@ for file in filenames:
 
     # scale
     img = cv2.resize(img, None, fx=multiplier, fy=multiplier, interpolation = cv2.INTER_CUBIC)
-    cv2.imwrite("output/cv2_scale_"+file, img)
+    #cv2.imwrite("output/cv2_scale_"+file, img)
 
     img_height, img_width, img_channels = img.shape
     print("img_height after scale: " + str(img_height))
@@ -96,74 +93,16 @@ for file in filenames:
     y1 = int(multiplier*y1)
     
     # translate
-    x_offset = 1300-x1
-    y_offset = 1500-y1
-    M = np.float32([[1, 0, x_offset],[0, 1, y_offset]])
-    img = cv2.warpAffine(img,M,(width, height))
+    #x_offset = 1300-x1
+    #y_offset = 1500-y1
+    #M = np.float32([[1, 0, x_offset],[0, 1, y_offset]])
+    #img = cv2.warpAffine(img,M,(width, height))
 
     # crop
-    img = img[1000:4000, 1000:4000]
-    #cv2.imwrite("output/cv2_crop_"+file, img)
-    cv2.imwrite("output/cv2_"+file, img)
+    img = img[y1-1300:y1+1700, x1-1300:x1+1700]
+    #cv2.imwrite("output/cv2_"+file, img)
 
-    # write output
-    
+    #img = cv2.resize(img, None, fx=0.5, fy=0.5, interpolation = cv2.INTER_CUBIC)
+    #cv2.imwrite("output/cv2_"+file, img)
 
-    # load pixmap
-    """pixmap = QtGui.QPixmap(sys.argv[1] + "/" + file)
-
-    # put it on a bigger pixmap
-    width = pixmap.width()
-    height = pixmap.height()
-
-    base = QtGui.QPixmap(10000, 10000)
-    painter = QtGui.QPainter()
-    painter.begin(base)
-    painter.fillRect(QtCore.QRect(0,0,10000, 10000), QtGui.QColor(255, 255, 255))
-    offset = 2000
-    painter.drawPixmap(offset, offset, offset+width, offset+height, pixmap, 0, 0, width, height)
-    painter.end()
-    pixmap = base
-
-    x1 += offset
-    y1 += offset
-
-    # perform transformations
-    mapped = QtCore.QPoint(x1, y1)
-    print("before mapping: " + str(mapped))
-    
-    rotation = QtGui.QTransform().rotate(angle)
-    mapped = rotation.map(mapped)
-    print("after rotation: " + str(mapped))
-
-    scale = QtGui.QTransform().scale(multiplier, multiplier)
-    mapped = scale.map(mapped)
-    print("after scale: " + str(mapped))
-
-    translation2 = QtGui.QTransform().translate(1300-mapped.x(), 1500-mapped.y())
-    mapped = translation2.map(mapped)
-    print("after translation: "+str(mapped))
-
-    # apply transformations
-    
-    #rotate
-    pixmap = pixmap.transformed(rotation)
-    pixmap.save("output/after_rotation_"+file, "JPG")
-    #scale
-    pixmap = pixmap.transformed(scale)
-    pixmap.save("output/after_scale_"+file, "JPG")
-    
-    #translate
-    #pixmap = pixmap.transformed(translation2)
-    
-    
-    image = pixmap.toImage()
-    image = image.copy(x1-1300,y1-1500,x1+1700,y1+1500)
-    pixmap.convertFromImage(image)
-    pixmap.save("output/"+file, "JPG")
-"""
     print("")
-
-    i += 1
-    if i == 10:
-        pass#exit()

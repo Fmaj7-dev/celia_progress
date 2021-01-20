@@ -15,9 +15,6 @@ class graphicsScene(QtWidgets.QGraphicsScene):
         self.lacrimal2 = None
 
     def mousePressEvent(self, event):
-        #super(graphicsScene, self).mousePressEvent(event)
-        #print(str(event.scenePos().x()) + " " +str(event.scenePos().y()))
-
         if self.lacrimal1 == None:
             print ("storing lacrimal1")
             self.lacrimal1 = event.scenePos()
