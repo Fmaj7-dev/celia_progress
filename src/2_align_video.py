@@ -103,6 +103,6 @@ for file in filenames:
     #cv2.imwrite("output/cv2_"+file, img)
 
     #img = cv2.resize(img, None, fx=0.5, fy=0.5, interpolation = cv2.INTER_CUBIC)
-    #cv2.imwrite("output/cv2_"+file, img)
+    cv2.imwrite("output/cv2_"+file, img)
 
     print("")

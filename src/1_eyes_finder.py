@@ -41,11 +41,14 @@ class EyesWidget(QtWidgets.QWidget):
         for orientation in ExifTags.TAGS.keys():
             if ExifTags.TAGS[orientation]=='Orientation':
                 break
+        print("orientation: "+str(orientation))
         
         exif = image._getexif()
 
         angle = 0
-        if exif is not None:
+        #print(exif)
+
+        if orientation in exif: # and exif is not None:
             if exif[orientation] == 3:
                 angle = 180
             elif exif[orientation] == 6:

@@ -1,1 +1,1 @@
-python 3_create_video.py 
+python3 3_create_video.py 
