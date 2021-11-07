@@ -1,7 +1,9 @@
 *.jpeg
 *.jpg
+*.tif
 *.jpg.txt
 *.avi
 *.mp4
 *.mp3
+*.pto
 .DS_Store

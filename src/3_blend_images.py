@@ -3,23 +3,23 @@ import sys
 import cv2 as cv
 
 # show num_static_frames frames of the same image without changing
-num_static_frames = 5
+num_static_frames = 10
 # then show num_blending_frames of the blending image
 num_blending_frames = 5
 # image sequence number
 sequence = 0
 
 # save image with sequence name
-def saveNewImage( image ):
+def saveNewImage( image, directory ):
     global sequence
 
-    filename = "output2/output_"+str(sequence).zfill(5)+".jpg"
+    filename = str(directory)+"output_"+str(sequence).zfill(5)+".jpg"
     print("\tsaving "+filename)
     cv.imwrite(filename, image)
     sequence += 1
 
 # iterate through output directory
-def processFiles( input ):
+def processFiles( input, output, extension ):
     global num_blending_frames
     global num_static_frames
 
@@ -28,9 +28,10 @@ def processFiles( input ):
 
     filenames = []
 
+    # add all the jpgs to a list
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-        if filename.endswith( ('.jpg') ):
+        if filename.endswith( (extension) ):
             filenames.append(filename)
 
     filenames.sort()
@@ -38,11 +39,10 @@ def processFiles( input ):
     for index, name in enumerate(filenames):
         # load image 1
         img1 = cv.imread(input+name)
-        #cv.imshow('image', img1)
 
         for i in range(num_static_frames):
             print( "not blending " + name )
-            saveNewImage(img1)
+            saveNewImage(img1, output)
         
         diff = 1/(num_blending_frames+1)
         if (index+1 < len(filenames)):
@@ -53,7 +53,7 @@ def processFiles( input ):
                 factor = (i+1)*diff
                 print( "blending "+str( factor )+ " "+ name + " and " + filenames[index+1])
                 result = cv.addWeighted(img1, 1-factor, img2, factor, 0)
-                saveNewImage(result)
+                saveNewImage(result, output)
 
 if __name__ == "__main__":
-    processFiles( sys.argv[1] )
+    processFiles( sys.argv[1], sys.argv[2], sys.argv[3] )
