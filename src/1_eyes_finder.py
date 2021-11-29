@@ -48,15 +48,16 @@ class EyesWidget(QtWidgets.QWidget):
         angle = 0
         #print(exif)
 
-        if orientation in exif: # and exif is not None:
-            if exif[orientation] == 3:
-                angle = 180
-            elif exif[orientation] == 6:
-                angle = 270
-            elif exif[orientation] == 8:
-                angle = 90
-        else:
-            print("no exif data found")
+        if exif is not None:
+            if orientation in exif: # and exif is not None:
+                if exif[orientation] == 3:
+                    angle = 180
+                elif exif[orientation] == 6:
+                    angle = 270
+                elif exif[orientation] == 8:
+                    angle = 90
+            else:
+                print("no exif data found")
 
         print("exif: angle "+str(angle))
         rotation = QtGui.QTransform().rotate(-angle)

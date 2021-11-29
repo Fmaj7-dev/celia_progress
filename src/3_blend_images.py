@@ -3,7 +3,7 @@ import sys
 import cv2 as cv
 
 # show num_static_frames frames of the same image without changing
-num_static_frames = 10
+num_static_frames = 5
 # then show num_blending_frames of the blending image
 num_blending_frames = 5
 # image sequence number
@@ -41,7 +41,7 @@ def processFiles( input, output, extension ):
         img1 = cv.imread(input+name)
 
         for i in range(num_static_frames):
-            print( "not blending " + name )
+            print( "static frame: " + name )
             saveNewImage(img1, output)
         
         diff = 1/(num_blending_frames+1)
@@ -51,7 +51,7 @@ def processFiles( input, output, extension ):
 
             for i in range(num_blending_frames):
                 factor = (i+1)*diff
-                print( "blending "+str( factor )+ " "+ name + " and " + filenames[index+1])
+                print( "blending frame"+str( factor )+ " "+ name + " and " + filenames[index+1])
                 result = cv.addWeighted(img1, 1-factor, img2, factor, 0)
                 saveNewImage(result, output)
 
